@@ -87,6 +87,31 @@
   @apply mt-16 flex-1 overflow-auto py-8 lg:mt-0 lg:max-h-screen lg:py-10
 }
 
+.auth {
+  @apply min-h-screen w-full bg-gradient-to-br from-teal-500 to-stone-600 animate-gradient-corner;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gradient corner animation */
+@keyframes gradientCornerAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-corner {
+  animation: gradientCornerAnimation 5s ease infinite;
+  background-size: 400% 400%;
+}
+
 /* ========================================== TAILWIND STYLES */
 @layer utilities {
   /* ===== UTILITIES */
