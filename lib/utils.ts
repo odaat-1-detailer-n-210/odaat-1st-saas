@@ -5,35 +5,27 @@ import qs from "qs";
 import { twMerge } from "tailwind-merge";
 
 import { aspectRatioOptions } from "@/constants";
-import { clearTimeout } from "timers";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 // ERROR HANDLER
-export function handleError(error: unknown) {
+export const handleError = (error: unknown) => {
   if (error instanceof Error) {
     // This is a native JavaScript error (e.g., TypeError, RangeError)
     console.error(error.message);
     throw new Error(`Error: ${error.message}`);
   } else if (typeof error === "string") {
     // This is a string error message
-    if (error === "Error: User not found") {
-      // Handle the specific "User not found" error case
-      console.error("User not found");
-      // You can perform additional actions here, such as redirecting the user or showing an error message
-    } else {
-      console.error(error);
-      throw new Error(`Error: ${error}`);
-    }
+    console.error(error);
+    throw new Error(`Error: ${error}`);
   } else {
-    // This is an unknown error
-    console.error("An unknown error occurred");
-    throw new Error("An unknown error occurred");
+    // This is an unknown type of error
+    console.error(error);
+    throw new Error(`Unknown error: ${JSON.stringify(error)}`);
   }
-}
-
+};
 
 // PLACEHOLDER LOADER - while image is transforming
 const shimmer = (w: number, h: number) => `
@@ -93,13 +85,11 @@ export function removeKeysFromQuery({
 }
 
 // DEBOUNCE
-export const debounce = <T extends any[]>(
-{ func, delay }: { func: (...args: T) => void; delay: number; }): ((...args: T) => void) => {
+export const debounce = (func: (...args: any[]) => void, delay: number) => {
   let timeoutId: NodeJS.Timeout | null;
-
-  return (...args: T) => {
-    clearTimeout(timeoutId as NodeJS.Timeout);
-    timeoutId = setTimeout(() => func(...args), delay);
+  return (...args: any[]) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(null, args), delay);
   };
 };
 
@@ -132,13 +122,11 @@ export const download = (url: string, filename: string) => {
       const a = document.createElement("a");
       a.href = blobURL;
 
-      if (filename && filename.length) {
+      if (filename && filename.length)
         a.download = `${filename.replace(" ", "_")}.png`;
-    }
       document.body.appendChild(a);
       a.click();
     })
-
     .catch((error) => console.log({ error }));
 };
 
