@@ -156,6 +156,11 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
+      /**
+       * Handles the change event when the toast is opened or closed.
+       *
+       * @param {boolean} open - Indicates whether the toast is open or closed.
+       */
       onOpenChange: (open) => {
         if (!open) dismiss()
       },
