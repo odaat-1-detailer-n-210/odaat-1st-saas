@@ -160,9 +160,10 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         }
       }))
     }, 1000)();
-
+  
     return onChangeField(value)
   }
+  
 
   const onTransformHandler = async () => {
     setIsTransforming(true)
